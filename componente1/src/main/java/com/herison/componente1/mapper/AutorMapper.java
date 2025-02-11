@@ -23,7 +23,6 @@ public class AutorMapper {
 
     public Autor toEntity(AutorDTO autorDTO) {
         Autor autor = new Autor();
-        autor.setId(autorDTO.id());
         autor.setNome(autorDTO.nome());
         return autor;
     }
