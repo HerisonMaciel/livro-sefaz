@@ -9,6 +9,21 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: biblioteca
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U admin -d biblioteca"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -27,6 +42,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Build and Test with Maven
+      - name: Wait for PostgreSQL to be ready
         run: |
-          mvn clean install
+          for i in {1..30}; do
+            nc -z localhost 5432 && echo "PostgreSQL is ready!" && exit 0
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL did not start in time" && exit 1
+
+      - name: Run Maven build and tests for componente1
+        run: |
+          cd componente1
+          mvn clean install -DskipTests=false
+
+      - name: Run Maven build and tests for componente2
+        run: |
+          cd componente2
+          mvn clean install -DskipTests=false
