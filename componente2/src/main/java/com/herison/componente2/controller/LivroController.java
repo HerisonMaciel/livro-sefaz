@@ -12,8 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/livros")
-@Tag(name = "API de Livros", description = "Endpoints para gerenciar livros")
-public class LivroController {
+public class LivroController implements LivroSwegger{
 
     private final LivroService livroService;
 
@@ -22,50 +21,32 @@ public class LivroController {
     }
 
     @PostMapping
-    @Operation(summary = "Buscar livro pelo ID", description = "Retorna os detalhes de um livro pelo ID")
-    @ApiResponse(responseCode = "200", description = "Livro encontrado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
-    public ResponseEntity<LivroDTO> buscarLivroPorId(@RequestBody LivroDTO livroDTO) {
+    public ResponseEntity<LivroDTO> criarLivro(@RequestBody LivroDTO livroDTO) {
         return ResponseEntity.ok(livroService.criarLivro(livroDTO));
     }
 
     @GetMapping
-    @Operation(summary = "Buscar livro pelo ID", description = "Retorna os detalhes de um livro pelo ID")
-    @ApiResponse(responseCode = "200", description = "Livro encontrado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     public ResponseEntity<List<LivroDTO>> buscarTodosLivros() {
         return ResponseEntity.ok(livroService.buscarTodosLivros());
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Buscar livro pelo ID", description = "Retorna os detalhes de um livro pelo ID")
-    @ApiResponse(responseCode = "200", description = "Livro encontrado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     public ResponseEntity<LivroDTO> buscarLivroPorId(@PathVariable Long id) {
         return ResponseEntity.ok(livroService.buscarLivroPorId(id));
     }
 
     @GetMapping("/titulo/{titulo}")
-    @Operation(summary = "Buscar livro pelo título", description = "Retorna os detalhes de um livro pelo título")
-    @ApiResponse(responseCode = "200", description = "Livro encontrado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     public ResponseEntity<LivroDTO> buscarLivroPorTitulo(@PathVariable String titulo) {
         return ResponseEntity.ok(livroService.buscarLivroPorTitulo(titulo));
     }
 
     @PatchMapping("/{id}")
-    @Operation(summary = "Editar livro pelo id", description = "Editar os detalhes de um livro pelo id")
-    @ApiResponse(responseCode = "200", description = "Livro editado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     public ResponseEntity<?> atualizarLivro(@PathVariable Long id, @RequestBody LivroDTO livroDTO) {
         livroService.atualizarLivro(id, livroDTO);
         return ResponseEntity.ok("Livro atualizado com sucesso!");
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Deletar livro pelo ID", description = "Remove um livro pelo ID")
-    @ApiResponse(responseCode = "204", description = "Livro deletado com sucesso")
-    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
     public ResponseEntity<Void> deletarLivroPorId(@PathVariable Long id) {
         livroService.deletarLivroPorId(id);
         return ResponseEntity.noContent().build();
