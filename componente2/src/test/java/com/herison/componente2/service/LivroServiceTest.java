@@ -19,10 +19,10 @@ import java.util.List;
 class LivroServiceTest {
 
     @Mock
-    private LivroClient livroClient; // Mock do FeignClient
+    private LivroClient livroClient;
 
     @InjectMocks
-    private LivroService livroService; // Instância do service com mocks injetados
+    private LivroService livroService;
 
     private LivroDTO livroDTO;
 
