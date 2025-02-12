@@ -6,4 +6,5 @@ public record LivroDTO(
         String descricao,
         String categoria,
         String autorId
-) {}
+) {
+}

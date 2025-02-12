@@ -50,6 +50,15 @@ public class AutorController {
         return ResponseEntity.ok(autorService.buscarAutorPorNome(nome));
     }
 
+    @PostMapping("/atualizar")
+    @Operation(summary = "Edita autor pelo ID", description = "Edita um autor pelo ID")
+    @ApiResponse(responseCode = "204", description = "Autor deletado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+    public ResponseEntity<?> atualizarAutor(@RequestBody AutorDTO autorDTO) {
+        autorService.atualizarAutor(autorDTO.id(), autorDTO.nome());
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar autor pelo ID", description = "Remove um autor pelo ID")
     @ApiResponse(responseCode = "204", description = "Autor deletado com sucesso")

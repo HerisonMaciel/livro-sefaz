@@ -4,6 +4,7 @@ import com.herison.componente1.Dtos.AutorDTO;
 import com.herison.componente1.entity.Autor;
 import com.herison.componente1.mapper.AutorMapper;
 import com.herison.componente1.repository.AutorRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +46,14 @@ public class AutorService {
         Autor autor = autorRepository.findByNomeIgnoreCase(nome)
                 .orElseThrow(() -> new RuntimeException("Autor não encontrado com o nome: " + nome));
         return autorMapper.toDTO(autor);
+    }
+
+    @Transactional
+    public void atualizarAutor(String id, String nome) {
+        if (!autorRepository.existsById(id)) {
+            throw new RuntimeException("Autor não encontrado com o ID: " + id);
+        }
+        autorRepository.atualizarAutor(id, nome);
     }
 
     public void deletarAutorPorId(String id) {

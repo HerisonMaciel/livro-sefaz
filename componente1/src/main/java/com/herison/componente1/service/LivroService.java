@@ -6,6 +6,7 @@ import com.herison.componente1.entity.Livro;
 import com.herison.componente1.mapper.LivroMapper;
 import com.herison.componente1.repository.AutorRepository;
 import com.herison.componente1.repository.LivroRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -65,6 +66,14 @@ public class LivroService {
         Livro livro = livroRepository.findByTituloIgnoreCase(titulo)
                 .orElseThrow(() -> new RuntimeException("Livro não encontrado com o título: " + titulo));
         return livroMapper.toDTO(livro);
+    }
+
+    @Transactional
+    public void atualizarLivro(Long id, LivroDTO livroDTO){
+        if (!livroRepository.existsById(id)) {
+            throw new RuntimeException("Livro não encontrado com o ID: " + id);
+        }
+        livroRepository.atualizarLivro(id, livroDTO.titulo(), livroDTO.descricao(), livroDTO.categoria());
     }
 
     public void deletarLivroPorId(Long id) {

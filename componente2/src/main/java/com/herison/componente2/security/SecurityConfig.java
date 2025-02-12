@@ -1,6 +1,5 @@
 package com.herison.componente2.security;
 
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,7 +37,16 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/search").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/v2/autores").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v2/autores/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v2/autores/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v2/livros").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v2/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v2/livros/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v2/autores").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v2/autores/nome").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v2/livros").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/api/v2/livros/titulo").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

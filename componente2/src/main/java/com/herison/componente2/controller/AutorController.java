@@ -2,11 +2,14 @@ package com.herison.componente2.controller;
 
 import com.herison.componente2.Dtos.AutorDTO;
 import com.herison.componente2.service.AutorService;
+import feign.Body;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/autores")
@@ -19,13 +22,28 @@ public class AutorController {
         this.autorService = autorService;
     }
 
+    @PostMapping
+    @Operation(summary = "Buscar autor pelo ID", description = "Retorna os detalhes de um autor pelo ID")
+    @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+    public ResponseEntity<AutorDTO> buscarAutorPorId(@RequestBody AutorDTO autorDTO) {
+        return ResponseEntity.ok(autorService.criarAutor(autorDTO));
+    }
+
+    @GetMapping
+    @Operation(summary = "Buscar autor pelo ID", description = "Retorna os detalhes de um autor pelo ID")
+    @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+    public ResponseEntity<List<AutorDTO>> buscarTodosAutores() {
+        return ResponseEntity.ok(autorService.buscarTodosAutores());
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Buscar autor pelo ID", description = "Retorna os detalhes de um autor pelo ID")
     @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso")
     @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     public ResponseEntity<AutorDTO> buscarAutorPorId(@PathVariable String id) {
-        autorService.buscarAutorPorId(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(autorService.buscarAutorPorId(id));
     }
 
     @GetMapping("/nome/{nome}")
@@ -33,7 +51,15 @@ public class AutorController {
     @ApiResponse(responseCode = "200", description = "Autor encontrado com sucesso")
     @ApiResponse(responseCode = "404", description = "Autor não encontrado")
     public ResponseEntity<AutorDTO> buscarAutorPorNome(@PathVariable String nome) {
-        autorService.buscarAutorPorNome(nome);
+        return ResponseEntity.ok(autorService.buscarAutorPorNome(nome));
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Edita autor pelo ID", description = "Edita um autor pelo ID")
+    @ApiResponse(responseCode = "204", description = "Autor deletado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Autor não encontrado")
+    public ResponseEntity<?> atualizarAutor(@PathVariable String id, @RequestBody AutorDTO autorDTO) {
+        autorService.atualizarAutor(id, autorDTO);
         return ResponseEntity.ok().build();
     }
 

@@ -50,6 +50,15 @@ public class LivroController {
         return ResponseEntity.ok(livroService.buscarLivroPorTitulo(titulo));
     }
 
+    @PostMapping("/atualizar")
+    @Operation(summary = "Editar livro pelo id", description = "Editar os detalhes de um livro pelo id")
+    @ApiResponse(responseCode = "200", description = "Livro editado com sucesso")
+    @ApiResponse(responseCode = "404", description = "Livro não encontrado")
+    public ResponseEntity<?> atualizarLivro(@RequestBody LivroDTO livroDTO) {
+        livroService.atualizarLivro(livroDTO.id(), livroDTO);
+        return ResponseEntity.ok("Livro atualizado com sucesso!");
+    }
+
     @DeleteMapping("/{id}")
     @Operation(summary = "Deletar livro pelo ID", description = "Remove um livro pelo ID")
     @ApiResponse(responseCode = "204", description = "Livro deletado com sucesso")

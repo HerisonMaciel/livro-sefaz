@@ -4,6 +4,8 @@ import com.herison.componente2.Dtos.AutorDTO;
 import com.herison.componente2.client.AutorClient;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AutorService {
 
@@ -13,15 +15,30 @@ public class AutorService {
         this.autorClient = autorClient;
     }
 
-    public void buscarAutorPorId(String id) {
-        //return autorClient.buscarAutorPorId(id);
+    public AutorDTO criarAutor(AutorDTO autorDTO){
+        return autorClient.criarAutor(autorDTO);
+    }
+
+    public List<AutorDTO> buscarTodosAutores(){
+        return autorClient.buscarTodosAutores();
+    }
+
+    public AutorDTO buscarAutorPorId(String id) {
+        return autorClient.buscarAutorPorId(id);
     }
 
     public void deletarAutorPorId(String id) {
-        //autorClient.deletarAutorPorId(id);
+        autorClient.deletarAutorPorId(id);
     }
 
-    public void buscarAutorPorNome(String nome) {
-        //return autorClient.buscarAutorPorNome(nome);
+    public void atualizarAutor(String id, AutorDTO autorDTO){
+        AutorDTO autorRequest = new AutorDTO(id, autorDTO.nome(),  null);
+        autorClient.atualizarAutor(autorRequest);
     }
+
+    public AutorDTO buscarAutorPorNome(String nome) {
+        return autorClient.buscarAutorPorNome(nome);
+    }
+
+
 }
