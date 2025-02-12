@@ -40,5 +40,4 @@ public class AutorService {
         return autorClient.buscarAutorPorNome(nome);
     }
 
-
 }

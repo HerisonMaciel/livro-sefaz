@@ -7,8 +7,8 @@ services:
       POSTGRES_DB: biblioteca
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: password
-    ports:
-      - "5432:5432"
+    networks:
+      - private_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -16,25 +16,36 @@ services:
     build:
       context: ./componente1
     container_name: componente1
-    ports:
-      - "8080:8080"
+    expose:
+      - "8080"  # 🚀 Expor apenas internamente, sem abrir portas externas
     depends_on:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/biblioteca
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: password
+    networks:
+      - private_network  # 🚀 Permite comunicação apenas dentro da rede privada
 
   componente2:
     build:
       context: ./componente2
     container_name: componente2
     ports:
-      - "8081:8081"
+      - "8081:8081"  # 🚀 Apenas o Componente 2 está acessível externamente
     depends_on:
       - componente1
     environment:
       COMPONENTE1_URL: http://componente1:8080
+    networks:
+      - private_network  # 🚀 Comunicação com o Componente 1
+      - public_network   # 🚀 Comunicação com o mundo externo
 
 volumes:
   postgres_data:
+
+networks:
+  private_network:
+    internal: true  # 🚀 Mantém essa rede isolada do mundo externo
+  public_network:
+    driver: bridge  # 🚀 Permite acesso externo apenas ao Componente 2

@@ -39,13 +39,35 @@ public class UsuarioController {
         this.tokenService = tokenService;
     }
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UsuarioDTO data){
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
             var token = tokenService.generateToken((Usuario) auth.getPrincipal());
             return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");
+        }
+    }*/
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid UsuarioDTO data) {
+        try {
+            // 🛠️ Cria um objeto de autenticação com login e senha
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+
+            // 🛠️ Tenta autenticar o usuário no AuthenticationManager
+            var auth = authenticationManager.authenticate(usernamePassword);
+
+            // 🛠️ Obtém o usuário autenticado e gera um token JWT
+            var usuario = (Usuario) auth.getPrincipal();
+            var token = tokenService.generateToken(usuario);
+
+            // 🛠️ Retorna o token JWT gerado
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Falha na autenticação");

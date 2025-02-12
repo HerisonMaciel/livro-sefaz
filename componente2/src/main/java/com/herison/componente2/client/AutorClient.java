@@ -1,7 +1,6 @@
 package com.herison.componente2.client;
 
 import com.herison.componente2.Dtos.AutorDTO;
-import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

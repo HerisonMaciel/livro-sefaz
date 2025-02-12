@@ -1,11 +1,8 @@
 package com.herison.componente2.service;
 
-import com.herison.componente2.Dtos.AutorDTO;
 import com.herison.componente2.Dtos.LivroDTO;
 import com.herison.componente2.client.LivroClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
